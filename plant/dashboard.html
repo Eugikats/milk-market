@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Plant Dashboard - Milk Connect</title>
+    <link rel="stylesheet" href="../style.css">
+    <!-- jQuery for modals -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery UI for enhanced modals -->
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Dashboard specific styles */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .sidebar {
+            background: var(--muted);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            color: var(--foreground);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .dashboard-card {
+            background: var(--background);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-card h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-card h3 .action-btn {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .chart-container {
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--muted);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card .label {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: var(--background);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: var(--radius);
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .supplier-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+        }
+
+        .supplier-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: 600;
+        }
+
+        .supplier-info {
+            flex: 1;
+        }
+
+        .supplier-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .logistics-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-active {
+            background: var(--primary);
+        }
+
+        .status-pending {
+            background: var(--accent);
+        }
+
+        .status-completed {
+            background: var(--secondary);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <header class="navbar">
+        <div w3-include-html="../templates/header.html"></div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="mb-4">Processing Plant Dashboard</h2>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active">Overview</a></li>
+                <li><a href="#" id="available-milk-btn">Available Milk</a></li>
+                <li><a href="#" id="purchase-history-btn">Purchase History</a></li>
+                <li><a href="#" id="quality-monitoring-btn">Quality Monitoring</a></li>
+                <li><a href="#" id="logistics-btn">Logistics</a></li>
+                <li><a href="#" id="payments-btn">Payments</a></li>
+                <li><a href="#" id="suppliers-btn">Suppliers</a></li>
+                <li><a href="#" id="profile-btn">Profile</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Stats Overview -->
+            <div class="dashboard-card">
+                <h3>Today's Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="value">250L</div>
+                        <div class="label">Milk Received</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value">5</div>
+                        <div class="label">Active Suppliers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value">UGX 300,000</div>
+                        <div class="label">Today's Purchases</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value">4.5</div>
+                        <div class="label">Avg. Quality Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Milk Supply Chart -->
+            <div class="dashboard-card">
+                <h3>Milk Supply Trend <button class="btn btn-outline action-btn" id="view-supply-details">View Details</button></h3>
+                <div class="chart-container">
+                    <canvas id="supplyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Active Suppliers -->
+            <div class="dashboard-card">
+                <h3>Active Suppliers <button class="btn btn-outline action-btn" id="view-all-suppliers">View All</button></h3>
+                <div class="suppliers-list">
+                    <div class="supplier-card">
+                        <div class="supplier-avatar">JD</div>
+                        <div class="supplier-info">
+                            <h4>John Doe</h4>
+                            <p>Last delivery: 50L (Today)</p>
+                        </div>
+                        <div class="supplier-actions">
+                            <button class="btn btn-outline btn-sm" onclick="viewSupplierDetails('JD')">View</button>
+                        </div>
+                    </div>
+                    <div class="supplier-card">
+                        <div class="supplier-avatar">MK</div>
+                        <div class="supplier-info">
+                            <h4>Mary Kintu</h4>
+                            <p>Last delivery: 75L (Yesterday)</p>
+                        </div>
+                        <div class="supplier-actions">
+                            <button class="btn btn-outline btn-sm" onclick="viewSupplierDetails('MK')">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logistics Status -->
+            <div class="dashboard-card">
+                <h3>Logistics Status <button class="btn btn-outline action-btn" id="view-all-logistics">View All</button></h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Delivery ID</th>
+                                <th>Supplier</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#DEL-1234</td>
+                                <td>John Doe</td>
+                                <td>50L</td>
+                                <td>
+                                    <div class="logistics-status">
+                                        <span class="status-indicator status-active"></span>
+                                        In Transit
+                                    </div>
+                                </td>
+                                <td><button class="btn btn-outline btn-sm" onclick="trackDelivery('DEL-1234')">Track</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DEL-1235</td>
+                                <td>Mary Kintu</td>
+                                <td>75L</td>
+                                <td>
+                                    <div class="logistics-status">
+                                        <span class="status-indicator status-pending"></span>
+                                        Scheduled
+                                    </div>
+                                </td>
+                                <td><button class="btn btn-outline btn-sm" onclick="trackDelivery('DEL-1235')">Track</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Available Milk Modal -->
+    <div id="available-milk-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Available Milk</h2>
+            <div class="mb-4">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="filter-quality">Filter by Quality</label>
+                        <select id="filter-quality" class="form-input">
+                            <option value="">All</option>
+                            <option value="4">4+ Stars</option>
+                            <option value="3">3+ Stars</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filter-distance">Filter by Distance</label>
+                        <select id="filter-distance" class="form-input">
+                            <option value="">All</option>
+                            <option value="5">Within 5km</option>
+                            <option value="10">Within 10km</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Supplier</th>
+                            <th>Quantity</th>
+                            <th>Price/L</th>
+                            <th>Quality Score</th>
+                            <th>Distance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>100L</td>
+                            <td>UGX 1,200</td>
+                            <td>4.5</td>
+                            <td>3.2km</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" onclick="placeOrder('JD-001')">Order</button>
+                                <button class="btn btn-outline btn-sm" onclick="viewSupplierDetails('JD')">View Supplier</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Place Order Modal -->
+    <div id="place-order-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Place Order</h2>
+            <form id="order-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="order-quantity">Quantity (L)</label>
+                        <input type="number" id="order-quantity" name="quantity" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="collection-date">Collection Date</label>
+                        <input type="date" id="collection-date" name="collection-date" class="form-input" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="collection-time">Preferred Collection Time</label>
+                    <select id="collection-time" name="collection-time" class="form-input" required>
+                        <option value="morning">Morning (6AM - 12PM)</option>
+                        <option value="afternoon">Afternoon (12PM - 6PM)</option>
+                        <option value="evening">Evening (6PM - 10PM)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" name="notes" class="form-input" rows="3"></textarea>
+                </div>
+                <div class="text-right">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('place-order-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Place Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Supplier Details Modal -->
+    <div id="supplier-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Supplier Details</h2>
+            <div id="supplier-details-content">
+                <!-- Supplier details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Logistics Tracking Modal -->
+    <div id="logistics-tracking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Delivery Tracking</h2>
+            <div id="logistics-tracking-content">
+                <!-- Logistics tracking details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <footer class="footer">
+        <div w3-include-html="../templates/footer.html"></div>
+    </footer>
+
+    <script src="../index.js"></script>
+    <script>
+        // Initialize charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            includeHTML();
+            initializeCharts();
+            setupModalHandlers();
+        });
+
+        // Initialize Chart.js charts
+        function initializeCharts() {
+            // Supply Chart
+            const supplyCtx = document.getElementById('supplyChart').getContext('2d');
+            const supplyChart = new Chart(supplyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Milk Supply (L)',
+                        data: [120, 190, 150, 180, 200, 170, 160],
+                        borderColor: '#3b82f6',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        // Modal handlers
+        function setupModalHandlers() {
+            // Available Milk Modal
+            $('#available-milk-btn').click(function() {
+                $('#available-milk-modal').dialog({
+                    width: '80%',
+                    maxWidth: 800,
+                    modal: true
+                });
+            });
+
+            // Close modals
+            $('.close-modal').click(function() {
+                $(this).closest('.modal').dialog('close');
+            });
+
+            // Form submission
+            $('#order-form').submit(function(e) {
+                e.preventDefault();
+                // Here you would handle the form submission
+                // For now, just close the modal
+                $('#place-order-modal').dialog('close');
+            });
+        }
+
+        // Place order
+        function placeOrder(supplierId) {
+            // In a real application, you would fetch supplier details and populate the form
+            $('#place-order-modal').dialog({
+                width: '80%',
+                maxWidth: 600,
+                modal: true
+            });
+        }
+
+        // View supplier details
+        function viewSupplierDetails(supplierId) {
+            // In a real application, you would fetch supplier details from the server
+            const supplierDetails = `
+                <div class="supplier-profile">
+                    <div class="supplier-header mb-4">
+                        <div class="supplier-avatar" style="width: 80px; height: 80px; font-size: 1.5rem;">${supplierId}</div>
+                        <div class="supplier-info">
+                            <h3>John Doe</h3>
+                            <p>Supplier since: January 2023</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Total Deliveries:</label>
+                            <p>45</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Average Quality Score:</label>
+                            <p>4.5</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Total Volume Supplied:</label>
+                            <p>2,500L</p>
+                        </div>
+                        <div class="form-group">
+                            <label>On-Time Delivery Rate:</label>
+                            <p>98%</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes:</label>
+                        <p>Reliable supplier with consistent quality.</p>
+                    </div>
+                </div>
+            `;
+            
+            $('#supplier-details-content').html(supplierDetails);
+            $('#supplier-details-modal').dialog({
+                width: '80%',
+                maxWidth: 600,
+                modal: true
+            });
+        }
+
+        // Track delivery
+        function trackDelivery(deliveryId) {
+            // In a real application, you would fetch delivery tracking details from the server
+            const trackingDetails = `
+                <div class="tracking-info">
+                    <h3>Delivery #${deliveryId}</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Supplier:</label>
+                            <p>John Doe</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity:</label>
+                            <p>50L</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pickup Time:</label>
+                            <p>2023-06-15 08:30 AM</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Estimated Arrival:</label>
+                            <p>2023-06-15 10:00 AM</p>
+                        </div>
+                    </div>
+                    <div class="tracking-status mt-4">
+                        <h4>Current Status</h4>
+                        <div class="logistics-status">
+                            <span class="status-indicator status-active"></span>
+                            In Transit - 30 minutes away
+                        </div>
+                        <div class="tracking-map mt-4" style="height: 200px; background: var(--muted); display: flex; align-items: center; justify-content: center;">
+                            Map would be displayed here
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            $('#logistics-tracking-content').html(trackingDetails);
+            $('#logistics-tracking-modal').dialog({
+                width: '80%',
+                maxWidth: 600,
+                modal: true
+            });
+        }
+    </script>
+</body>
+</html> 
