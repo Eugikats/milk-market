@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Listings - Farmer Dashboard | Milk Connect</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Additional styles specific to farmer listings page */
+        .listings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .listings-title {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .listings-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .listings-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--background);
+            color: var(--foreground);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-button:hover,
+        .filter-button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .listings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        .listings-table th,
+        .listings-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .listings-table th {
+            font-weight: 500;
+            color: var(--muted-foreground);
+            background: var(--muted);
+        }
+
+        .listings-table tr:hover {
+            background: var(--muted);
+        }
+
+        .listing-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(22, 163, 74, 0.1);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(234, 179, 8, 0.1);
+            color: var(--warning);
+        }
+
+        .status-sold {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+
+        .status-expired {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--destructive);
+        }
+
+        .listing-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-button {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--background);
+            color: var(--foreground);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-button:hover {
+            background: var(--muted);
+        }
+
+        .action-button.edit {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .action-button.delete {
+            color: var(--destructive);
+            border-color: var(--destructive);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            color: var(--muted-foreground);
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-description {
+            color: var(--muted-foreground);
+            max-width: 400px;
+            margin: 0 auto 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .listings-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .listings-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <header class="navbar">
+        <!-- Header content from templates/header.html -->
+        <div w3-include-html="../templates/header.html"></div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Listings Header -->
+            <div class="listings-header">
+                <h1 class="listings-title">My Listings</h1>
+                <div class="listings-actions">
+                    <a href="#" class="btn btn-primary">Create New Listing</a>
+                </div>
+            </div>
+
+            <!-- Listings Filters -->
+            <div class="listings-filters">
+                <button class="filter-button active">All Listings</button>
+                <button class="filter-button">Active</button>
+                <button class="filter-button">Pending</button>
+                <button class="filter-button">Sold</button>
+                <button class="filter-button">Expired</button>
+            </div>
+
+            <!-- Listings Table -->
+            <div class="listings-table-container">
+                <table class="listings-table">
+                    <thead>
+                        <tr>
+                            <th>Listing</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Quality</th>
+                            <th>Status</th>
+                            <th>Posted</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="listing-info">
+                                    <div class="listing-title">Fresh Grade A Milk</div>
+                                    <div class="listing-location">Kampala, Central Region</div>
+                                </div>
+                            </td>
+                            <td>UGX1,500/L</td>
+                            <td>500L</td>
+                            <td>Grade A</td>
+                            <td>
+                                <span class="listing-status status-active">Active</span>
+                            </td>
+                            <td>2 hours ago</td>
+                            <td>
+                                <div class="listing-actions">
+                                    <button class="action-button edit">Edit</button>
+                                    <button class="action-button delete">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="listing-info">
+                                    <div class="listing-title">Organic Grade A Milk</div>
+                                    <div class="listing-location">Entebbe, Central Region</div>
+                                </div>
+                            </td>
+                            <td>UGX1,800/L</td>
+                            <td>300L</td>
+                            <td>Grade A</td>
+                            <td>
+                                <span class="listing-status status-pending">Pending</span>
+                            </td>
+                            <td>4 hours ago</td>
+                            <td>
+                                <div class="listing-actions">
+                                    <button class="action-button edit">Edit</button>
+                                    <button class="action-button delete">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="listing-info">
+                                    <div class="listing-title">Fresh Grade B Milk</div>
+                                    <div class="listing-location">Jinja, Eastern Region</div>
+                                </div>
+                            </td>
+                            <td>UGX1,200/L</td>
+                            <td>400L</td>
+                            <td>Grade B</td>
+                            <td>
+                                <span class="listing-status status-sold">Sold</span>
+                            </td>
+                            <td>1 day ago</td>
+                            <td>
+                                <div class="listing-actions">
+                                    <button class="action-button edit">Edit</button>
+                                    <button class="action-button delete">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="listing-info">
+                                    <div class="listing-title">Fresh Grade A Milk</div>
+                                    <div class="listing-location">Mbarara, Western Region</div>
+                                </div>
+                            </td>
+                            <td>UGX1,600/L</td>
+                            <td>600L</td>
+                            <td>Grade A</td>
+                            <td>
+                                <span class="listing-status status-expired">Expired</span>
+                            </td>
+                            <td>3 days ago</td>
+                            <td>
+                                <div class="listing-actions">
+                                    <button class="action-button edit">Edit</button>
+                                    <button class="action-button delete">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State (hidden by default) -->
+            <div class="empty-state" style="display: none;">
+                <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                </svg>
+                <h2 class="empty-state-title">No Listings Found</h2>
+                <p class="empty-state-description">
+                    You haven't created any listings yet. Create your first listing to start selling your milk.
+                </p>
+                <a href="#" class="btn btn-primary">Create New Listing</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <footer class="footer">
+        <!-- Footer content from templates/footer.html -->
+        <div w3-include-html="../templates/footer.html"></div>
+    </footer>
+</body>
+<script src="../index.js"></script>
+<script>
+    includeHTML();
+</script>
+</html> 

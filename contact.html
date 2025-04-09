@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Milk Connect</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles specific to contact page */
+        .contact-card {
+            height: 100%;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .contact-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+        }
+
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <header class="navbar">
+        <!-- Header content from templates/header.html -->
+        <div w3-include-html="./templates/header.html"></div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-12 bg-muted">
+            <div class="container text-center">
+                <h1 class="mb-4">Contact Us</h1>
+                <p class="text-lg">Get in touch with our team for any questions or support</p>
+            </div>
+        </section>
+
+        <!-- Contact Methods -->
+        <section class="container py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- Phone -->
+                <div class="card contact-card">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl mb-2">Call Us</h3>
+                    <p class="mb-2">Available Mon-Fri, 9am-5pm</p>
+                    <a href="tel:+256700123456" class="text-primary">+256 700 123 456</a>
+                </div>
+
+                <!-- Email -->
+                <div class="card contact-card">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl mb-2">Email Us</h3>
+                    <p class="mb-2">We'll respond within 24 hours</p>
+                    <a href="mailto:support@milkconnect.com" class="text-primary">support@milkconnect.com</a>
+                </div>
+
+                <!-- Office -->
+                <div class="card contact-card">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl mb-2">Visit Us</h3>
+                    <p class="mb-2">Kampala, Uganda</p>
+                    <address class="not-italic">
+                        Plot 123, Innovation Hub<br>
+                        Kololo, Kampala
+                    </address>
+                </div>
+            </div>
+
+            <!-- Contact Form and Map -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Contact Form -->
+                <div class="card">
+                    <h2 class="text-2xl mb-6">Send us a Message</h2>
+                    <form action="#" method="POST" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" id="firstName" name="firstName" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" class="form-input" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <select id="subject" name="subject" class="form-input" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="sales">Sales</option>
+                                <option value="partnership">Partnership</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea id="message" name="message" class="form-textarea" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-full">Send Message</button>
+                    </form>
+                </div>
+
+                <!-- Map -->
+                <div class="space-y-6">
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.7573641636447!2d32.59242661475345!3d0.3372146997275674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x177dbb0932058e0f%3A0x2f9b37a76e62d54e!2sKololo%2C%20Kampala%2C%20Uganda!5e0!3m2!1sen!2s!4v1645608972034!5m2!1sen!2s"
+                            allowfullscreen=""
+                            loading="lazy">
+                        </iframe>
+                    </div>
+
+                    <!-- Office Hours -->
+                    <div class="card">
+                        <h3 class="text-xl mb-4">Office Hours</h3>
+                        <ul class="space-y-2">
+                            <li class="flex justify-between">
+                                <span>Monday - Friday</span>
+                                <span>9:00 AM - 5:00 PM</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Saturday</span>
+                                <span>10:00 AM - 2:00 PM</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Sunday</span>
+                                <span>Closed</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="container py-12">
+            <h2 class="text-2xl mb-8 text-center">Frequently Asked Questions</h2>
+            <div class="accordion max-w-3xl mx-auto">
+                <div class="accordion-item" id="contact-faq-1">
+                    <div class="accordion-header">What is your typical response time?</div>
+                    <div class="accordion-content">
+                        <p>We aim to respond to all inquiries within 24 hours during business days.</p>
+                    </div>
+                </div>
+                <div class="accordion-item" id="contact-faq-2">
+                    <div class="accordion-header">Do you offer emergency support?</div>
+                    <div class="accordion-content">
+                        <p>Yes, premium and enterprise customers have access to 24/7 emergency support.</p>
+                    </div>
+                </div>
+                <div class="accordion-item" id="contact-faq-3">
+                    <div class="accordion-header">Can I schedule a demo?</div>
+                    <div class="accordion-content">
+                        <p>Yes, you can schedule a demo by selecting 'Sales' in the contact form subject or calling our sales team directly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Include Footer -->
+    <footer class="footer">
+        <!-- Footer content from templates/footer.html -->
+        <div w3-include-html="./templates/footer.html"></div>
+    </footer>
+</body>
+<script src="index.js"></script>
+<script>
+    includeHTML();
+</script>
+</html>

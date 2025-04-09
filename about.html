@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Milk Connect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <header class="navbar">
+        <!-- Header content from templates/header.html -->
+        <div w3-include-html="./templates/header.html"></div>
+    </header>
+
+    <main class="container py-12">
+        <h1 class="text-4xl font-bold mb-6">About Milk Connect</h1>
+        
+        <div class="space-y-8">
+            <section class="card mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Our Mission</h2>
+                <p class="text-lg">
+                    Milk Connect was founded with a simple but powerful mission: to eliminate inefficiencies 
+                    in Uganda's dairy supply chain by directly connecting farmers with milk processing plants.
+                    We're dedicated to creating fair market opportunities and ensuring sustainable livelihoods 
+                    for dairy farmers across Uganda.
+                </p>
+            </section>
+            
+            <section class="card mb-8">
+                <h2 class="text-2xl font-semibold mb-4">The Problem We're Solving</h2>
+                <p class="text-lg mb-4">
+                    Dairy farmers in rural Uganda often face significant challenges:
+                </p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Unpredictable price fluctuations causing financial instability</li>
+                    <li>Limited access to consistent buyers, resulting in milk wastage</li>
+                    <li>Exploitation by middlemen who purchase milk at unfairly low prices</li>
+                    <li>Logistical difficulties in transporting milk to distant processing facilities</li>
+                    <li>Lack of market information and pricing transparency</li>
+                </ul>
+            </section>
+            
+            <section class="card mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Our Solution</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="card card-hover">
+                        <h3 class="text-xl font-semibold mb-2">Direct Connections</h3>
+                        <p>Connect farmers directly with processing plants, eliminating middlemen</p>
+                    </div>
+                    <div class="card card-hover">
+                        <h3 class="text-xl font-semibold mb-2">Price Transparency</h3>
+                        <p>Real-time market prices and fair trading practices</p>
+                    </div>
+                    <div class="card card-hover">
+                        <h3 class="text-xl font-semibold mb-2">Secure Payments</h3>
+                        <p>Timely and secure payment processing for all transactions</p>
+                    </div>
+                    <div class="card card-hover">
+                        <h3 class="text-xl font-semibold mb-2">Efficient Logistics</h3>
+                        <p>Optimized transportation and delivery management</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="card mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Join Us</h2>
+                <p class="text-lg mb-4">
+                    Whether you're a dairy farmer looking for better market access, a processing plant seeking 
+                    reliable milk supply, or simply interested in our mission, we invite you to join the Milk 
+                    Connect community.
+                </p>
+                <div class="flex gap-4 mt-6">
+                    <a href="register.html" class="btn btn-primary">Sign Up Today</a>
+                    <a href="contact.html" class="btn btn-outline">Contact Us</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <footer class="footer">
+        <!-- Footer content from templates/footer.html -->
+        <div w3-include-html="./templates/footer.html"></div>
+    </footer>
+</body>
+<script src="index.js"></script>
+<script>
+    includeHTML();
+</script>
+</html> 

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - Milk Connect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Include Header -->
+    <header class="navbar">
+        <!-- Header content from templates/header.html -->
+        <div w3-include-html="./templates/header.html"></div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="py-12 bg-muted">
+            <div class="container text-center">
+                <h1 class="mb-4">Platform Features</h1>
+                <p class="text-lg mb-8">Discover how Milk Connect revolutionizes the dairy supply chain</p>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="container py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Market Access -->
+                <div class="card card-hover">
+                    <img src="assets/market.svg" alt="Market Access" class="mb-4 w-12 h-12">
+                    <h3 class="text-xl mb-2">Market Access</h3>
+                    <p>Direct connection between farmers and processing plants, eliminating middlemen.</p>
+                </div>
+
+                <!-- Real-time Pricing -->
+                <div class="card card-hover">
+                    <img src="assets/pricing.svg" alt="Real-time Pricing" class="mb-4 w-12 h-12">
+                    <h3 class="text-xl mb-2">Real-time Pricing</h3>
+                    <p>Live market rates and transparent pricing for all transactions.</p>
+                </div>
+
+                <!-- Secure Payments -->
+                <div class="card card-hover">
+                    <img src="assets/payments.svg" alt="Secure Payments" class="mb-4 w-12 h-12">
+                    <h3 class="text-xl mb-2">Secure Payments</h3>
+                    <p>Safe and timely payment processing for all milk transactions.</p>
+                </div>
+
+                <!-- Quality Tracking -->
+                <div class="card card-hover">
+                    <img src="assets/quality.svg" alt="Quality Tracking" class="mb-4 w-12 h-12">
+                    <h3 class="text-xl mb-2">Quality Tracking</h3>
+                    <p>Monitor and maintain milk quality standards throughout the supply chain.</p>
+                </div>
+
+                <!-- Logistics Management -->
+                <div class="card card-hover">
+                    <img src="assets/logistics.svg" alt="Logistics" class="mb-4 w-12 h-12">
+                    <h3 class="text-xl mb-2">Logistics Management</h3>
+                    <p>Efficient transportation and delivery tracking system.</p>
+                </div>
+
+                <!-- Analytics -->
+                <div class="card card-hover">
+                    <img src="assets/analytics.svg" alt="Analytics" class="mb-4 w-12 h-12">
+                    <h3 class="text-xl mb-2">Analytics Dashboard</h3>
+                    <p>Detailed insights and reporting for better decision making.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Features -->
+        <section class="py-12 bg-muted">
+            <div class="container">
+                <h2 class="text-2xl mb-8 text-center">Detailed Features</h2>
+                <div class="accordion">
+                    <div class="accordion-item" id="market-features">
+                        <div class="accordion-header">Market Features</div>
+                        <div class="accordion-content">
+                            <ul class="list-disc pl-4">
+                                <li>Real-time market prices</li>
+                                <li>Direct buyer-seller matching</li>
+                                <li>Automated price negotiations</li>
+                                <li>Market demand forecasting</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item" id="quality-features">
+                        <div class="accordion-header">Quality Control</div>
+                        <div class="accordion-content">
+                            <ul class="list-disc pl-4">
+                                <li>Quality standards tracking</li>
+                                <li>Temperature monitoring</li>
+                                <li>Batch tracking system</li>
+                                <li>Quality certification</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item" id="logistics-features">
+                        <div class="accordion-header">Logistics</div>
+                        <div class="accordion-content">
+                            <ul class="list-disc pl-4">
+                                <li>Route optimization</li>
+                                <li>Real-time delivery tracking</li>
+                                <li>Transportation scheduling</li>
+                                <li>Delivery confirmation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="container py-12 text-center">
+            <h2 class="text-2xl mb-4">Ready to Transform Your Dairy Business?</h2>
+            <p class="mb-6">Join Milk Connect today and experience these features firsthand.</p>
+            <div class="flex justify-center gap-4">
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+                <a href="contact.html" class="btn btn-outline">Contact Sales</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Include Footer -->
+    <footer class="footer">
+        <!-- Footer content from templates/footer.html -->
+        <div w3-include-html="./templates/footer.html"></div>
+    </footer>
+</body>
+<script src="index.js"></script>
+<script>
+    includeHTML();
+</script>
+</html> 
